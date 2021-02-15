@@ -37,16 +37,23 @@ export const App = () => {
             по возростанию цены
           </label>
 
+          <label>
          <input
             type="radio"
             name="descending"
             value="descending"
-          />
+            />
+            по убыванию цены
+          </label>
+
+          <label>
           <input
             type="radio"
             name="alphabetically"
             value="alphabetically"
-          />
+            />
+            по алфавиту
+          </label>
         </form>
       </div>
     </div>
