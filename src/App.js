@@ -1,25 +1,54 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+import { getProducts } from './components/api/api.jsx'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+export const App = () => {
+  const [products, setProducts] = useState([]);
+  
+  useEffect(() => {
+    getProducts().then(setProducts)
+  }, [])
 
-export default App;
+  console.log(products)
+
+  return (
+    <div className={"wrapper"}>
+      <div className={"content"}>
+        <form className={"content-sort"}>
+          <h2 className={"content-price"}>Цена</h2>
+          <label className="content-from">
+            от:
+            <input type="number"></input>
+          </label>
+          <label className="content-to">
+            до:
+            <input type="number"></input>
+          </label>
+          <h2>Валюта</h2>
+          <button type="button">USD</button>
+          <button type="button">UAH</button>
+          <h2>Сортировка</h2>
+          <label>
+          <input
+            type="radio"
+            name="Ascending"
+            value="Ascending"
+            />
+            по возростанию цены
+          </label>
+
+         <input
+            type="radio"
+            name="descending"
+            value="descending"
+          />
+          <input
+            type="radio"
+            name="alphabetically"
+            value="alphabetically"
+          />
+        </form>
+      </div>
+    </div>
+  )
+}
