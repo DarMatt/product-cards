@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export const NewProductCard = ({addProduct}) => {
   const [product, setProduct] = useState({});
@@ -7,10 +7,25 @@ export const NewProductCard = ({addProduct}) => {
   const [file, setFile] = useState('');
   const [description, setDescription] = useState('');
 
-  
-  setProduct()
+  useEffect(() => {
+    setProduct({
+      id : +new Date(),
+      name, price, description
+    })
+  }, [name,price,description])
 
-  console.log(description);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+      addProduct(product);
+
+    setName('');
+    setPrice('');
+    setDescription('');
+  }
+
+  // console.log(product);
+
   return (
     <form className="new-product"
       onSubmit={handleSubmit}
@@ -21,6 +36,7 @@ export const NewProductCard = ({addProduct}) => {
           type="text"
           placeholder="Name"
           className="new-product-input new-name"
+          required
           value={name}
           onChange={(event) => setName(event.target.value.trimLeft())}
         />
@@ -31,6 +47,7 @@ export const NewProductCard = ({addProduct}) => {
       <input
         type="number"
         // value="1000"
+        required
         className="new-product-input new-price"
         value={price}
         onChange={(event) => setPrice(event.target.value)}
@@ -41,6 +58,7 @@ export const NewProductCard = ({addProduct}) => {
           name="file"
           type="file"
           id="input__file"
+          required
           class="input input__file"
           multiple
         />
@@ -55,8 +73,9 @@ export const NewProductCard = ({addProduct}) => {
       <textarea
         placeholder="Description"
         className="new-product-label"
+        required
         value={description}
-        onChange={(event) => setDescription(event.target.value)}
+        onChange={(event) => setDescription(event.target.value.trimLeft())}
       >
 
       </textarea>

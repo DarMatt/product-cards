@@ -7,7 +7,7 @@ export const ProductCard = ({ product }) => {
     <>
       <figure className="product-image">
         <img
-          src={product.image}
+          src={'/public/api/img/1.jpg'}
           alt={product.name}
         />
       </figure>

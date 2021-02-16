@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { getProducts } from './components/api/api.jsx';
 import { ProductList } from './components/ProductList/ProductList.jsx';
 import './App.css';
@@ -6,51 +6,49 @@ import { NewProductCard } from './components/NewProductCard/NewProductCard.jsx';
 
 export const App = () => {
   const [products, setProducts] = useState([]);
-  const [visibleProducts, setVisibleProducts] = useState(products);
   const [sortValue, setSortValue] = useState('alphabetically');
   const [numberFrom, setNumberFrom] = useState(0);
-  const [numberTo, setNumberTo] = useState(10000);
+  const [numberTo, setNumberTo] = useState(100000);
 
-  const addProduct = (product) => {
-    setVisibleProducts([...visibleProducts, product])
-  }
-  
   useEffect(() => {
     getProducts().then(productsFromServer => {
       setProducts(productsFromServer.products)
     })
   }, []);
 
-  useEffect(() => {
-    switch (sortValue) {
+  const addProduct = (product) => {
+    console.log(product)
+    setProducts([...products, product])
+  }
+  
+  const filteredProducts = useMemo(() => products.filter((product) => {
+    return product.price >= numberFrom && product.price <= numberTo
+  }), [numberTo, numberFrom, sortValue, products])
+
+  console.log(products)
+
+  const sortedProducts = useMemo(() => {
+     switch (sortValue) {
       case 'alphabetically':
-        setVisibleProducts([...products].sort((a, b) => (
+       return  [...filteredProducts].sort((a, b) => (
           a.name.localeCompare(b.name)
-        )))
-        break;
+        ))
 
       case 'ascending':
-        setVisibleProducts([...products].sort((a, b) => (
+        return[...filteredProducts].sort((a, b) => (
           a.price - b.price
-        )))
-        break;
+        ))
   
       case 'descending':
-        setVisibleProducts([...products].sort((a, b) => (
+        return [...filteredProducts].sort((a, b) => (
           b.price - a.price
-        )));
-        break;
-
-      default:
-        break;
+        ));
+       
+        default:
+        return filteredProducts
     }
-  }, [sortValue, products]);
+  },[sortValue, filteredProducts])
   
-  useEffect(() => {
-    setVisibleProducts([...products].sort((a, b) => (
-      a.price - b.numberFrom
-    )));
-  }, [numberFrom])
   
   // console.log(numberFrom)
 
@@ -70,8 +68,17 @@ export const App = () => {
               />
               </label>
               <label className="content-to-label">
-              до:
-              <input type="number" className="content-to" />
+                до:
+              <input
+                  type="number"
+                  className="content-to"
+                  onChange={(event) => {
+                    if (!event.target.value) {
+                      setNumberTo(Infinity)
+                    } else {
+                      setNumberTo(event.target.value)
+                    }}}
+                />
               </label>
               </div>
             <h2 className="currency">Валюта</h2>
@@ -114,7 +121,7 @@ export const App = () => {
           <NewProductCard addProduct={addProduct} />
           </div>
         <div className="product-list">
-          <ProductList products={ visibleProducts }/>
+          <ProductList products={ sortedProducts }/>
         </div>
       </div>
     </div>
