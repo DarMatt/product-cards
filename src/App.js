@@ -3,6 +3,7 @@ import { getProducts } from './components/api/api.jsx';
 import { ProductList } from './components/ProductList/ProductList.jsx';
 import './App.css';
 import { NewProductCard } from './components/NewProductCard/NewProductCard.jsx';
+import { Details } from './components/Details/Details.jsx';
 
 export const App = () => {
   const [products, setProducts] = useState([]);
@@ -10,26 +11,14 @@ export const App = () => {
   const [numberFrom, setNumberFrom] = useState(0);
   const [numberTo, setNumberTo] = useState(100000);
   const [currency, setCurrency] = useState('UAH')
-  console.log(products)
+  const [selectedId, setSelectedId] = useState('')
+  const [details, setDetails] = useState({});
 
   useEffect(() => {
     getProducts().then(productsFromServer => {
       setProducts(productsFromServer.products)
     })
   }, []);
-
-  useEffect(() => {
-    if (!localStorage.products) {
-      localStorage.setItem('products', JSON.stringify([]));
-    } else {
-      setProducts(JSON.parse(localStorage.getItem('products')));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('products', JSON.stringify(products));
-  }, [products]);
-
 
   const addProduct = (product) => {
     setProducts([...products, product]);
@@ -40,14 +29,14 @@ export const App = () => {
   }), [numberTo, numberFrom, sortValue, products])
 
   const sortedProducts = useMemo(() => {
-     switch (sortValue) {
+    switch (sortValue) {
       case 'alphabetically':
-       return  [...filteredProducts].sort((a, b) => (
+        return [...filteredProducts].sort((a, b) => (
           a.name.localeCompare(b.name)
         ))
 
       case 'ascending':
-        return[...filteredProducts].sort((a, b) => (
+        return [...filteredProducts].sort((a, b) => (
           a.price - b.price
         ))
   
@@ -56,10 +45,10 @@ export const App = () => {
           b.price - a.price
         ));
        
-        default:
+      default:
         return filteredProducts
     }
-  },[sortValue, filteredProducts])
+  }, [sortValue, filteredProducts])
   
 
   useEffect(() => {
@@ -78,90 +67,115 @@ export const App = () => {
     }))
   }, [currency])
 
+  const onSelectedId = (id) => {
+    setSelectedId(id)
+  }
+
+  const reset = () => {
+    setSelectedId('')
+  }
+
+  useEffect(() => {
+    setDetails(products.filter(product => (product.id === selectedId)))
+  }, [selectedId])
 
   return (
     <div className="wrapper">
       <div className="content">
-        <div className="content-sort">
-          <form>
-            <h2 className="content-price">Цена</h2>
-            <div className="content-inner-label">
-            <label className="content-from-label">
-                от:
-              <input
-                  className="content-from"
-                  type="number"
-                  onChange={(event) => setNumberFrom(event.target.value)}
-              />
-              </label>
-              <label className="content-to-label">
-                до:
-              <input
-                  type="number"
-                  className="content-to"
-                  onChange={(event) => {
-                    if (!event.target.value) {
-                      setNumberTo(Infinity)
-                    } else {
-                      setNumberTo(event.target.value)
-                    }}}
+        {!selectedId ? (
+          <>
+            <div className="content-sort">
+              <form>
+                <h2 className="content-price">Цена</h2>
+                <div className="content-inner-label">
+                <label className="content-from-label">
+                    от:
+                  <input
+                      className="content-from"
+                      type="number"
+                      onChange={(event) => setNumberFrom(event.target.value)}
+                  />
+                  </label>
+                  <label className="content-to-label">
+                    до:
+                  <input
+                      type="number"
+                      className="content-to"
+                      onChange={(event) => {
+                        if (!event.target.value) {
+                          setNumberTo(Infinity)
+                        } else {
+                          setNumberTo(event.target.value)
+                        }}}
+                    />
+                  </label>
+                  </div>
+                <h2 className="currency">Валюта</h2>
+                <button
+                  className="usd"
+                  type="button"
+                  value="USD"
+                  onClick={(event) => setCurrency(event.target.value)}>
+                  USD
+                  </button>
+                <button
+                  className="uah"
+                  type="button"
+                  value="UAH"
+                  onClick={(event) => setCurrency(event.target.value)}>
+                  UAH
+                  </button>
+                <h2 className="content-sorting">Сортировка</h2>
+                <label className="radio-button">
+                  <input
+                    className="radio-input"
+                    type="radio"
+                    name="sorting"
+                    value="ascending"
+                    onClick={(event) => setSortValue(event.target.value)}
+                  />
+                  по возростанию цены
+                </label>
+
+                <label className="radio-button">
+                  <input
+                    className="radio-input"
+                    type="radio"
+                    name="sorting"
+                    value="descending"
+                    onClick={(event) => setSortValue(event.target.value)}
                 />
-              </label>
+                  по убыванию цены
+                </label>
+
+                <label className="radio-button">
+                  <input
+                    className="radio-input"
+                    type="radio"
+                    name="sorting"
+                    value="alphabetically"
+                    onClick={(event) => setSortValue(event.target.value)}
+                  />
+                  по алфавиту
+                </label>
+              </form>
+              <NewProductCard addProduct={addProduct} />
               </div>
-            <h2 className="currency">Валюта</h2>
-            <button
-              className="usd"
-              type="button"
-              value="USD"
-              onClick={(event) => setCurrency(event.target.value)}>
-              USD
-              </button>
-            <button
-              className="uah"
-              type="button"
-              value="UAH"
-              onClick={(event) => setCurrency(event.target.value)}>
-              UAH
-              </button>
-            <h2 className="content-sorting">Сортировка</h2>
-            <label className="radio-button">
-              <input
-                className="radio-input"
-                type="radio"
-                name="sorting"
-                value="ascending"
-                onClick={(event) => setSortValue(event.target.value)}
+            <div className="product-wrapper-list">
+              <ProductList
+                products={sortedProducts}
+                currency={currency}
+                onSelectedId={onSelectedId}
               />
-              по возростанию цены
-            </label>
-
-            <label className="radio-button">
-              <input
-                className="radio-input"
-                type="radio"
-                name="sorting"
-                value="descending"
-                onClick={(event) => setSortValue(event.target.value)}
+            </div>
+          </>
+        ) : (
+            <Details
+              product={details[0]}
+              currency={currency}
+              reset={reset}
             />
-              по убыванию цены
-            </label>
-
-            <label className="radio-button">
-              <input
-                className="radio-input"
-                type="radio"
-                name="sorting"
-                value="alphabetically"
-                onClick={(event) => setSortValue(event.target.value)}
-              />
-              по алфавиту
-            </label>
-          </form>
-          <NewProductCard addProduct={addProduct} />
-          </div>
-        <div className="product-list">
-          <ProductList products={sortedProducts} currency={currency} />
-        </div>
+          )}
       </div>
     </div>
   )

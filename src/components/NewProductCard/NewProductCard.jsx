@@ -16,8 +16,6 @@ export const NewProductCard = ({addProduct}) => {
 
   }, [name,price, file, description])
 
-  console.log(product.file)
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
