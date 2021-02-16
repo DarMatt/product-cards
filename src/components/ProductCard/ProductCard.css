@@ -1,5 +1,5 @@
 .product-image {
-  width: 200px;
+  width: 150px;
   object-fit: contain;
   cursor: pointer;
   transition: transform 1s;

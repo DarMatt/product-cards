@@ -4,10 +4,9 @@ import './NewProduct.css';
 export const NewProductCard = ({addProduct}) => {
   const [product, setProduct] = useState({});
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState(1000);
   const [file, setFile] = useState('');
   const [description, setDescription] = useState('');
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setProduct({
@@ -17,14 +16,12 @@ export const NewProductCard = ({addProduct}) => {
 
   }, [name,price, file, description])
 
+  console.log(product.file)
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(product.file)
-    if (product.file.Error) {
-      setVisible(true)
-    }
 
-      addProduct(product);
+    addProduct(product);
 
     setName('');
     setPrice('');
@@ -32,18 +29,15 @@ export const NewProductCard = ({addProduct}) => {
     setFile('');
   }
 
-
   const handleUpload = (event) => {
     setFile(event.target.files[0]);
   }
-
-  // console.log(product);
 
   return (
     <form className="new-product"
       onSubmit={handleSubmit}
     >
-      <label className="new-product-label">
+      <label className="new-product-insert">
         Имя
         <input
           type="text"
@@ -55,35 +49,29 @@ export const NewProductCard = ({addProduct}) => {
         />
       </label>
   
-      <label className="new-product-label" />
+      <label className="new-product-insert" />
         Цена
       <input
         type="number"
-        // value="1000"
         required
         className="new-product-input new-price"
         value={price}
         onChange={(event) => setPrice(event.target.value)}
       />
       
-      <div class="input__wrapper" id="upload-box">
+      <div className="input__wrapper" id="upload-box">
         <input
           name="file"
           type="file"
           id="input__file"
           required
-          class="input input__file"
+          className="input input__file"
           multiple
           onChange={handleUpload}
         />
-        {!visible ? (
-          <p className="hidden"></p>
-        ) : (
-          <p className="visible">Не выбрано изображение</p>
-          )}
         <div className="art">Изображение</div> 
-        <label for="input__file" class="input__file-button">
-          <span class="input__file-icon-wrapper">
+        <label htmlFor="input__file" className="input__file-button">
+          <span className="input__file-icon-wrapper">
             +  
           </span>
         </label>

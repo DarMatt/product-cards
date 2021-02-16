@@ -18,17 +18,17 @@ export const App = () => {
     })
   }, []);
 
-  // useEffect(() => {
-  //   if (!localStorage.products) {
-  //     localStorage.setItem('products', JSON.stringify([]));
-  //   } else {
-  //     setProducts(JSON.parse(localStorage.getItem('products')));
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!localStorage.products) {
+      localStorage.setItem('products', JSON.stringify([]));
+    } else {
+      setProducts(JSON.parse(localStorage.getItem('products')));
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem('products', JSON.stringify(products));
-  // }, [products]);
+  useEffect(() => {
+    localStorage.setItem('products', JSON.stringify(products));
+  }, [products]);
 
 
   const addProduct = (product) => {
@@ -160,7 +160,7 @@ export const App = () => {
           <NewProductCard addProduct={addProduct} />
           </div>
         <div className="product-list">
-          <ProductList products={ sortedProducts }/>
+          <ProductList products={sortedProducts} currency={currency} />
         </div>
       </div>
     </div>

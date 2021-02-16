@@ -5,6 +5,12 @@
   max-width: 1000px;
 }
 
+@media (max-width: 1244px) {
+  .product-list {
+    justify-content: center;
+  }
+}
+
 .product-item {
   display: flex;
   width: 400px;
