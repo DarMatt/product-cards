@@ -1,0 +1,21 @@
+.product-image {
+  width: 200px;
+  background-color: red;
+}
+
+.product-title {
+  font-size: 16px;
+}
+
+.product-price {
+  font-size: 16px;
+}
+
+.product-desc {
+  font-size: 10px;
+  max-width: 250px;
+}
+
+.product-inner {
+  padding-left: 20px;
+}

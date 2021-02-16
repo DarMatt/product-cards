@@ -1,1 +1,107 @@
+.wrapper {
+  max-width: 1260px;
+  margin: 0 auto;
+}
 
+.content {
+  padding-top: 40px;
+  display: flex;
+}
+
+.content-sort {
+  display: block;
+  max-width: 350px;
+}
+
+.content-price {
+  margin-bottom: 20px;
+}
+
+
+.content-from {
+   display: block;
+   width: 80px;
+   height: 25px;
+}
+
+.content-to {
+  display: block;
+  width: 90px;
+  height: 25px;
+}
+
+.content-inner-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.currency {
+  margin-bottom: 10px;
+}
+
+.content-sort {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.radio-button {
+  display: block;
+}
+
+.radio-input {
+  margin-right: 10px;
+}
+
+.new-product-label {
+  display: block;
+}
+
+.new-product {
+  margin-top: 90px;
+}
+
+.input__wrapper {
+  width: 100%;
+  position: relative;
+  margin: 15px 0;
+  text-align: center;
+}
+ 
+.input__file {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+}
+ 
+ .new-product-input {
+   width: 130px;
+ }
+
+ .new-price {
+   margin-left: 5px;
+ }
+
+ .new-name {
+  margin-left: 14px;
+}
+ 
+.input__file-button {
+  width: 100%;
+  max-width: 30px;
+  height: 30px;
+  background: grey;
+  color: #fff;
+  font-size: 1.125rem;
+  font-weight: 700;
+  display: inline-block;
+  border-radius: 3px;
+  cursor: pointer;
+  line-height: 30px;
+  text-align: center;
+}
+
+.art {
+  display: inline-block;
+  margin-right: 28px;
+}
