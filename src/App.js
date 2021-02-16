@@ -9,6 +9,8 @@ export const App = () => {
   const [sortValue, setSortValue] = useState('alphabetically');
   const [numberFrom, setNumberFrom] = useState(0);
   const [numberTo, setNumberTo] = useState(100000);
+  const [currency, setCurrency] = useState('UAH')
+
 
   useEffect(() => {
     getProducts().then(productsFromServer => {
@@ -16,16 +18,26 @@ export const App = () => {
     })
   }, []);
 
+  useEffect(() => {
+    if (!localStorage.getItem('products')) {
+      setProducts(JSON.parse(localStorage.getItem('products')));
+    } else {
+      setProducts(JSON.parse(localStorage.getItem('products')));
+    }
+
+  }, []);
+
+
   const addProduct = (product) => {
-    console.log(product)
-    setProducts([...products, product])
+    setProducts([...products, product]);
+    localStorage.setItem('products', JSON.stringify([...products, product]));
   }
   
-  const filteredProducts = useMemo(() => products.filter((product) => {
+  let filteredProducts = useMemo(() => products.filter((product) => {
     return product.price >= numberFrom && product.price <= numberTo
   }), [numberTo, numberFrom, sortValue, products])
 
-  console.log(products)
+  console.log(currency)
 
   const sortedProducts = useMemo(() => {
      switch (sortValue) {
@@ -49,7 +61,33 @@ export const App = () => {
     }
   },[sortValue, filteredProducts])
   
+
+  useEffect(() => {
+    setProducts(products.map(product => {
+      if (currency === 'USD') {
+        return {
+          ...product,
+          price: +product.price / 28
+        };
+      } else {
+        return {
+          ...product,
+          price: +product.price * 28
+        }
+      }
+    }))
+  }, [currency])
+
+
   
+  // const changePriceToUSD = () => {
+  //   setProducts(products.map(product => {
+  //     return {
+  //       ...product,
+  //       price: +product.price * 28
+  //     }
+  //   }))
+  // }
   // console.log(numberFrom)
 
   return (
@@ -82,9 +120,21 @@ export const App = () => {
               </label>
               </div>
             <h2 className="currency">Валюта</h2>
-            <button type="button">USD</button>
-            <button type="button">UAH</button>
-            <h2 className="content-sort">Сортировка</h2>
+            <button
+              className="usd"
+              type="button"
+              value="USD"
+              onClick={(event) => setCurrency(event.target.value)}>
+              USD
+              </button>
+            <button
+              className="uah"
+              type="button"
+              value="UAH"
+              onClick={(event) => setCurrency(event.target.value)}>
+              UAH
+              </button>
+            <h2 className="content-sorting">Сортировка</h2>
             <label className="radio-button">
               <input
                 className="radio-input"

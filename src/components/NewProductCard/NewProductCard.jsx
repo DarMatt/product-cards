@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './NewProduct.css';
 
 export const NewProductCard = ({addProduct}) => {
   const [product, setProduct] = useState({});
@@ -6,22 +7,34 @@ export const NewProductCard = ({addProduct}) => {
   const [price, setPrice] = useState('');
   const [file, setFile] = useState('');
   const [description, setDescription] = useState('');
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setProduct({
       id : +new Date(),
-      name, price, description
+      name, price, file, description
     })
-  }, [name,price,description])
+    console.log(product)
+  }, [name,price, file, description])
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(product.file)
+    if (product.file.Error) {
+      setVisible(true)
+    }
 
       addProduct(product);
 
     setName('');
     setPrice('');
     setDescription('');
+    setFile('');
+  }
+  console.log(visible)
+
+  const handleUpload = (event) => {
+    setFile(event.target.files[0]);
   }
 
   // console.log(product);
@@ -53,7 +66,7 @@ export const NewProductCard = ({addProduct}) => {
         onChange={(event) => setPrice(event.target.value)}
       />
       
-      <div class="input__wrapper">
+      <div class="input__wrapper" id="upload-box">
         <input
           name="file"
           type="file"
@@ -61,13 +74,20 @@ export const NewProductCard = ({addProduct}) => {
           required
           class="input input__file"
           multiple
+          onChange={handleUpload}
         />
+        {!visible ? (
+          <p className="hidden"></p>
+        ) : (
+          <p className="visible">Не выбрано изображение</p>
+          )}
         <div className="art">Изображение</div> 
         <label for="input__file" class="input__file-button">
           <span class="input__file-icon-wrapper">
             +  
           </span>
-          </label>
+        </label>
+        {file && <ImageThumb image={file} />}
       </div>
   
       <textarea
@@ -83,3 +103,7 @@ export const NewProductCard = ({addProduct}) => {
     </form>
   )
 }
+
+const ImageThumb = ({ image }) => {
+  return <img src={URL.createObjectURL(image)} alt={image.name} />;
+};
