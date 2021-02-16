@@ -10,7 +10,7 @@ export const App = () => {
   const [numberFrom, setNumberFrom] = useState(0);
   const [numberTo, setNumberTo] = useState(100000);
   const [currency, setCurrency] = useState('UAH')
-
+  console.log(products)
 
   useEffect(() => {
     getProducts().then(productsFromServer => {
@@ -18,26 +18,26 @@ export const App = () => {
     })
   }, []);
 
-  useEffect(() => {
-    if (!localStorage.getItem('products')) {
-      setProducts(JSON.parse(localStorage.getItem('products')));
-    } else {
-      setProducts(JSON.parse(localStorage.getItem('products')));
-    }
+  // useEffect(() => {
+  //   if (!localStorage.products) {
+  //     localStorage.setItem('products', JSON.stringify([]));
+  //   } else {
+  //     setProducts(JSON.parse(localStorage.getItem('products')));
+  //   }
+  // }, []);
 
-  }, []);
+  // useEffect(() => {
+  //   localStorage.setItem('products', JSON.stringify(products));
+  // }, [products]);
 
 
   const addProduct = (product) => {
     setProducts([...products, product]);
-    localStorage.setItem('products', JSON.stringify([...products, product]));
   }
   
   let filteredProducts = useMemo(() => products.filter((product) => {
     return product.price >= numberFrom && product.price <= numberTo
   }), [numberTo, numberFrom, sortValue, products])
-
-  console.log(currency)
 
   const sortedProducts = useMemo(() => {
      switch (sortValue) {
@@ -78,17 +78,6 @@ export const App = () => {
     }))
   }, [currency])
 
-
-  
-  // const changePriceToUSD = () => {
-  //   setProducts(products.map(product => {
-  //     return {
-  //       ...product,
-  //       price: +product.price * 28
-  //     }
-  //   }))
-  // }
-  // console.log(numberFrom)
 
   return (
     <div className="wrapper">

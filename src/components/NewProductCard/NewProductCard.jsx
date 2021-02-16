@@ -14,7 +14,7 @@ export const NewProductCard = ({addProduct}) => {
       id : +new Date(),
       name, price, file, description
     })
-    console.log(product)
+
   }, [name,price, file, description])
 
   const handleSubmit = (event) => {
@@ -31,7 +31,7 @@ export const NewProductCard = ({addProduct}) => {
     setDescription('');
     setFile('');
   }
-  console.log(visible)
+
 
   const handleUpload = (event) => {
     setFile(event.target.files[0]);
