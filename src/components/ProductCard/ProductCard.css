@@ -1,6 +1,7 @@
 .product-image {
   width: 150px;
   object-fit: contain;
+  align-self: center;
   cursor: pointer;
   transition: transform 1s;
 }
