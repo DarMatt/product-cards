@@ -2,7 +2,7 @@ import React from 'react';
 import  './ProductCard.css';
 
 export const ProductCard = ({ product }) => {
-  const src = (product.image) ? `../../../${product.image}` : URL.createObjectURL(product.file);
+  const src = (product.image) ? `https://darmatt.github.io/product-cards/${product.image}` : URL.createObjectURL(product.file);
 
   return (
     <>
